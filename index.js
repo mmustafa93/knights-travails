@@ -1,3 +1,11 @@
+function knightMoves(start, end){
+    // Base case: if the start and end squares are the same
+    if (start == end) {
+        return [start]; 
+    }
+
+}
+
 function getValidKnightMoves(square) {
     // square is an array [x, y]
     // Initialize an empty array to save the valid moves of the  Knight
