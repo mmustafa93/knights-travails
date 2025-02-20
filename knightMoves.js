@@ -47,12 +47,12 @@ function knightMoves(start, end){
         return null;
         
         } 
-        
+
     const path = bfs(start, end);
 
     if (path) {
         const movesCount = path.length - 1;
-        console.log(`You made it in ${movesCount} move/s. Here's your path:\n`);
+        console.log(`You made it in ${movesCount} moves. Here's your path:\n`);
         path.forEach(square => {
         console.log(`[${square[0]}, ${square[1]}]`);
         });
@@ -106,3 +106,24 @@ if (x >= 0 && x <= 7 && y >= 0 && y <= 7 ) {
     return false;
 }
 }
+
+function reconstructPath(targetSquare, parentMap) {
+    // Array to store the reconstructed path
+    const path = []; 
+    // Start from the target square
+    let currentSquare = targetSquare;
+    // Trace back from the target to the start using "parents" in parentMap
+    while (currentSquare !== null) {
+      // Add the current square to the start of the array (to maintain the correct order)
+      path.unshift(currentSquare); 
+      // Get the "parent" of the current square from parentMap and update currentSquare
+      currentSquare = parentMap.get(JSON.stringify(currentSquare));
+    }
+    // Return the array containing the full path
+    return path;
+  }
+
+knightMoves([0, 0], [7, 7]);
+knightMoves([0, 0], [3, 3]);
+knightMoves([0, 0], [4, 7]);
+knightMoves([0, 0], [4, 9]);
