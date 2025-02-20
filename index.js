@@ -4,6 +4,60 @@ function knightMoves(start, end){
         return [start]; 
     }
 
+    // BFS (Breadth-First Search) algorithm to find the shortest path.
+    function bfs(startSquare, endSquare){
+        const queue = []; // Queue to manage squares to visit in BFS
+        const visitedSquares = new Set(); // Set to keep track of visited squares
+        const parentMap = new Map(); // Map to store the "parent" of each square in the path
+    
+        // Add the starting square to the queue to initiate BFS
+        queue.push(startSquare); 
+        // Mark the start square as visited (convert to a string for Set compatibility)
+        visitedSquares.add(JSON.stringify(startSquare)); 
+        // The "parent" of the start square is null since it is the starting point
+        parentMap.set(JSON.stringify(startSquare), null);  
+
+        // Main BFS loop
+        while (queue.length > 0) {
+            // Dequeue a square from the queue
+            const currentSquare = queue.shift();
+    
+            // Check if the currentSquare is the target (end) square
+            if (currentSquare[0] === endSquare[0] && currentSquare[1] === endSquare[1]) {
+            // We've found the shortest path, call reconstructPath and return the result
+            return reconstructPath(currentSquare, parentMap);
+            } else {
+            const availableMoves = getValidKnightMoves(currentSquare);
+            
+            availableMoves.forEach(nextMove => {
+                const nextMoveStr = JSON.stringify(nextMove);
+                if (!visitedSquares.has(nextMoveStr)) {
+                // Mark nextMove as visited
+                visitedSquares.add(nextMoveStr);
+                // Set the parent of nextMove
+                parentMap.set(nextMoveStr, currentSquare);
+                // Enqueue nextMove
+                queue.push(nextMove);
+                }
+            });
+            }
+        }
+        
+        console.log("Queue empty, target not found (this shouldn't happen in this problem)");
+        return null;
+        
+        } 
+        
+    const path = bfs(start, end);
+
+    if (path) {
+        const movesCount = path.length - 1;
+        console.log(`You made it in ${movesCount} move/s. Here's your path:\n`);
+        path.forEach(square => {
+        console.log(`[${square[0]}, ${square[1]}]`);
+        });
+        return path;
+    }
 }
 
 function getValidKnightMoves(square) {
